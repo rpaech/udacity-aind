@@ -14,7 +14,7 @@ The level cost is a helper function used by MaxLevel and LevelSum. The level cos
 &emsp;**inputs:**  
 &emsp;&emsp;_graph_, a leveled planning graph  
 &emsp;&emsp;_goal_, a literal that is a goal in the planning graph  
-  
+
 &emsp;**for each** _layer<sub>i_ in _graph.literalLayers_ **do**  
 &emsp;&emsp;**if** _goal_ in _layer<sub>i_ **then return** i  
 
@@ -30,7 +30,7 @@ The level cost is a helper function used by MaxLevel and LevelSum. The level cos
 **function** MaxLevel(_graph_) **returns** a value  
 &emsp;**inputs:**  
 &emsp;&emsp;_graph_, an initialized (unleveled) planning graph  
-  
+
 &emsp;_costs_ = []  
 &emsp;_graph_.fill()  _/* fill the planning graph until it levels off */_  
 &emsp;**for each** _goal_ in _graph.goalLiterals_ **do**  
@@ -49,7 +49,7 @@ The level cost is a helper function used by MaxLevel and LevelSum. The level cos
 **function** LevelSum(_graph_) **returns** a value  
 &emsp;**inputs:**  
 &emsp;&emsp;_graph_, an initialized (unleveled) planning graph  
-  
+
 &emsp;_costs_ = []  
 &emsp;_graph_.fill()  _/* fill the planning graph until it levels off */_  
 &emsp;**for each** _goal_ in _graph.goalLiterals_ **do**  
@@ -68,14 +68,14 @@ The level cost is a helper function used by MaxLevel and LevelSum. The level cos
 **function** SetLevel(_graph_) **returns** a value  
 &emsp;**inputs:**  
 &emsp;&emsp;_graph_, an initialized (unleveled) planning graph  
-  
+
 &emsp;_graph_.fill()  _/* fill the planning graph until it levels off */_  
 &emsp;**for** _layer<sub>i_ in _graph.literalLayers_ **do**  
 &emsp;&emsp;_allGoalsMet_ <- _true_  
 &emsp;&emsp;**for each** _goal_ in _graph.goalLiterals_ **do**  
 &emsp;&emsp;&emsp;**if** _goal_ not in _layer<sub>i_ **then** _allGoalsMet_ <- _false_  
 &emsp;&emsp;**if** not _allGoalsMet_ **then** continue  
-  
+
 &emsp;&emsp;_goalsAreMutex_ <- _false_  
 &emsp;&emsp;**for each** _goalA_ in _graph.goalLiterals_ **do**  
 &emsp;&emsp;&emsp;**for each** _goalB_ in _graph.goalLiterals_ **do**  
@@ -91,7 +91,7 @@ These heuristics can be made _much_ more efficient by incrementally growing the 
 ---
 **function** MaxLevel(_graph_) **returns** a value  
 &emsp;**inputs:** _graph_, an initialized (unleveled) planning graph  
-  
+
 &emsp;_i_ <- 0  
 &emsp;**loop until** _graph_.isLeveled **do**  
 &emsp;&emsp;_allGoalsMet_ <- true  

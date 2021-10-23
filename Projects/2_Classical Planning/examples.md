@@ -13,11 +13,12 @@ A planning graph consists of a sequence of "layers" alternating between `Literal
 ```
 
 #### `fill() : PlanningGraph`
-    The fill method extends the planning graph until it is leveled, or until a specified number of levels have been added. This function simply calls the `_extend()` method in a loop until the terminating condition is satisfied.
+
+The fill method extends the planning graph until it is leveled, or until a specified number of levels have been added. This function simply calls the `_extend()` method in a loop until the terminating condition is satisfied.
 
 #### `_extend() : None`
-    The extend method grows the planning graph by adding both a new action layer and a new literal layer (a planning graph can never end on an action layer). When the planning graph will be used by a search heuristic, it is usually more efficient to construct the planning graph layer-by-layer because it stops immediately when the heuristic value is known rather than building the full graph until it levels off.
 
+The extend method grows the planning graph by adding both a new action layer and a new literal layer (a planning graph can never end on an action layer). When the planning graph will be used by a search heuristic, it is usually more efficient to construct the planning graph layer-by-layer because it stops immediately when the heuristic value is known rather than building the full graph until it levels off.
 
 ### Examples:
 

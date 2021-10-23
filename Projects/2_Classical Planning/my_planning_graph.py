@@ -19,9 +19,11 @@ class ActionLayer(BaseActionLayer):
         --------
         layers.ActionNode
         """
-        # TODO: implement this function
-        raise NotImplementedError
 
+        effects_of_A = self.children[actionA]
+        negated_effects_of_B = {~effect for effect in self.children[actionB]}
+        
+        return len(effects_of_A & negated_effects_of_B) > 0
 
     def _interference(self, actionA, actionB):
         """ Return True if the effects of either action negate the preconditions of the other 
@@ -34,8 +36,15 @@ class ActionLayer(BaseActionLayer):
         --------
         layers.ActionNode
         """
-        # TODO: implement this function
-        raise NotImplementedError
+        
+        preconds_of_A = self.parents[actionA]
+        preconds_of_B = self.parents[actionB]
+
+        negated_effects_of_A = {~effect for effect in self.children[actionA]}
+        negated_effects_of_B = {~effect for effect in self.children[actionB]}
+
+        return len(preconds_of_A & negated_effects_of_B
+                   | preconds_of_B & negated_effects_of_A) > 0
 
     def _competing_needs(self, actionA, actionB):
         """ Return True if any preconditions of the two actions are pairwise mutex in the parent layer
@@ -49,8 +58,10 @@ class ActionLayer(BaseActionLayer):
         layers.ActionNode
         layers.BaseLayer.parent_layer
         """
-        # TODO: implement this function
-        raise NotImplementedError
+
+        return any([self.parent_layer.is_mutex(precond_of_A, precond_of_B) 
+                    for precond_of_A in self.parents[actionA]
+                    for precond_of_B in self.parents[actionB]])
 
 
 class LiteralLayer(BaseLiteralLayer):
@@ -66,13 +77,15 @@ class LiteralLayer(BaseLiteralLayer):
         --------
         layers.BaseLayer.parent_layer
         """
-        # TODO: implement this function
-        raise NotImplementedError
+        
+        return all([self.parent_layer.is_mutex(actionA, actionB)
+                    for actionA in self.parents[literalA]
+                    for actionB in self.parents[literalB]])
 
     def _negation(self, literalA, literalB):
         """ Return True if two literals are negations of each other """
-        # TODO: implement this function
-        raise NotImplementedError
+        
+        return literalA == ~literalB
 
 
 class PlanningGraph:
@@ -136,7 +149,7 @@ class PlanningGraph:
         Russell-Norvig 10.3.1 (3rd Edition)
         """
         # TODO: implement this function
-        raise NotImplementedError
+        return 1
 
     def h_maxlevel(self):
         """ Calculate the max level heuristic for the planning graph
@@ -166,7 +179,7 @@ class PlanningGraph:
         WARNING: you should expect long runtimes using this heuristic with A*
         """
         # TODO: implement maxlevel heuristic
-        raise NotImplementedError
+        return 1
 
     def h_setlevel(self):
         """ Calculate the set level heuristic for the planning graph
@@ -191,7 +204,7 @@ class PlanningGraph:
         WARNING: you should expect long runtimes using this heuristic on complex problems
         """
         # TODO: implement setlevel heuristic
-        raise NotImplementedError
+        return 1
 
     ##############################################################################
     #                     DO NOT MODIFY CODE BELOW THIS LINE                     #
