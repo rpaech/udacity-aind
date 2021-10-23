@@ -133,7 +133,7 @@ class PlanningGraph:
         achieve a single goal literal.
         
         For example, if Goal_1 first appears in level 0 of the graph (i.e.,
-        it is satisfied at the root of the planning graph) and Goal_2 first
+        it is goals_met at the root of the planning graph) and Goal_2 first
         appears in level 3, then the levelsum is 0 + 3 = 3.
 
         Hints
@@ -148,8 +148,27 @@ class PlanningGraph:
         --------
         Russell-Norvig 10.3.1 (3rd Edition)
         """
-        # TODO: implement this function
-        return 1
+
+        goals_met = set()
+        total_cost = 0
+        level_cost = 0
+        
+        while not self._is_leveled:
+
+            current_layer = self.literal_layers[-1]
+
+            for goal in self.goal:
+                if (goal not in goals_met and goal in current_layer):
+                    goals_met.add(goal)
+                    total_cost += level_cost
+            
+            if goals_met == self.goal:
+                break
+
+            self._extend()
+            level_cost += 1
+
+        return total_cost
 
     def h_maxlevel(self):
         """ Calculate the max level heuristic for the planning graph
@@ -178,8 +197,24 @@ class PlanningGraph:
         -----
         WARNING: you should expect long runtimes using this heuristic with A*
         """
-        # TODO: implement maxlevel heuristic
-        return 1
+        
+        level_cost = 0
+        while not self._is_leveled:
+
+            current_layer = self.literal_layers[-1]
+            all_goals_met = True
+
+            for goal in self.goal:
+                if goal not in current_layer:
+                    all_goals_met = False
+            
+            if all_goals_met:
+                break
+
+            self._extend()
+            level_cost += 1
+
+        return level_cost
 
     def h_setlevel(self):
         """ Calculate the set level heuristic for the planning graph
@@ -203,9 +238,29 @@ class PlanningGraph:
         -----
         WARNING: you should expect long runtimes using this heuristic on complex problems
         """
-        # TODO: implement setlevel heuristic
-        return 1
 
+        level_cost = 0
+        while not self._is_leveled:
+
+            current_layer = self.literal_layers[-1]
+            all_goals_met = True
+            
+            for goal in self.goal:
+                if goal not in current_layer:
+                    all_goals_met = False
+
+            if all_goals_met:
+                goals_are_mutex = [current_layer.is_mutex(goalA, goalB)
+                                   for goalA in self.goal
+                                   for goalB in self.goal]
+                if not any(goals_are_mutex):
+                    break
+
+            self._extend()
+            level_cost += 1
+
+        return level_cost
+        
     ##############################################################################
     #                     DO NOT MODIFY CODE BELOW THIS LINE                     #
     ##############################################################################
