@@ -90,6 +90,7 @@ A reference to previous layer in the planning graph.
 A dict mapping from each node in the layer to a set of parent nodes in the previous layer. For action layers, the parents of each action node N are the literals in the previous layer that are preconditions for action N.
 
 ### children : dict
+
 A dict mapping from each node in the layer to a set of children nodes in the next layer. For action layers, the children of each action node N are the literals in the next layer that are effects for action N.
 
 #### is_mutex() : bool

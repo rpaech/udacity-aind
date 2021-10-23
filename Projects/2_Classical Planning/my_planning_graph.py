@@ -202,12 +202,8 @@ class PlanningGraph:
         while not self._is_leveled:
 
             current_layer = self.literal_layers[-1]
-            all_goals_met = True
+            all_goals_met = self.goal.issubset(current_layer)
 
-            for goal in self.goal:
-                if goal not in current_layer:
-                    all_goals_met = False
-            
             if all_goals_met:
                 break
 
@@ -243,12 +239,8 @@ class PlanningGraph:
         while not self._is_leveled:
 
             current_layer = self.literal_layers[-1]
-            all_goals_met = True
+            all_goals_met = self.goal.issubset(current_layer)
             
-            for goal in self.goal:
-                if goal not in current_layer:
-                    all_goals_met = False
-
             if all_goals_met:
                 goals_are_mutex = [current_layer.is_mutex(goalA, goalB)
                                    for goalA in self.goal
