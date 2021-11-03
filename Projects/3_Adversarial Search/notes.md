@@ -37,11 +37,13 @@ Your agent won 61.5% of matches against Greedy Agent
 
 ### Minimax with depth 3 search against random opponent
 
+```
 Running 100 games:
 ++++-+++++++++++++++++++++++-++++-++++++++++++++++++++++++++++++++++++++++-+++++++++++-+++++++++++++
 Running 100 games:
 +++-+++++++++++++++++++++++++++++--++++-++++++++++-++++++++++++++++++++++++--+++++++++++++++++++-++-
 Your agent won 93.0% of matches against Random Agent
+```
 
 ### AB negamax with depth 3 search against random opponent
 
