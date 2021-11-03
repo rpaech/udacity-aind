@@ -1,0 +1,72 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Greedy, 2 rounds",
+            "type": "python",
+            "request": "launch",
+            "program": "run_match.py",
+            "args": ["-r", "2", "-o", "GREEDY"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Greedy, 2 rounds, debug",
+            "type": "python",
+            "request": "launch",
+            "program": "run_match.py",
+            "args": ["-r", "2", "-o", "GREEDY", "-d"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Random, 2 rounds",
+            "type": "python",
+            "request": "launch",
+            "program": "run_match.py",
+            "args": ["-r", "2", "-o", "RANDOM"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Random, 2 rounds, debug",
+            "type": "python",
+            "request": "launch",
+            "program": "run_match.py",
+            "args": ["-r", "2", "-o", "RANDOM", "-d"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Minimax, 2 rounds",
+            "type": "python",
+            "request": "launch",
+            "program": "run_match.py",
+            "args": ["-r", "2", "-o", "MINIMAX"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Minimax, 2 rounds, debug",
+            "type": "python",
+            "request": "launch",
+            "program": "run_match.py",
+            "args": ["-r", "2", "-o", "MINIMAX", "-d"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Self, 2 rounds",
+            "type": "python",
+            "request": "launch",
+            "program": "run_match.py",
+            "args": ["-r", "2", "-o", "SELF"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Self, 2 rounds, debug",
+            "type": "python",
+            "request": "launch",
+            "program": "run_match.py",
+            "args": ["-r", "2", "-o", "SELF", "-d"],
+            "console": "integratedTerminal"
+        }
+    ]
+}
