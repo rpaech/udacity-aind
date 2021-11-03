@@ -164,6 +164,9 @@ def _play(agents, game_state, time_limit, match_id, debug=False):
 def fork_get_action(game_state, active_player, time_limit, debug=False):
     receiver, sender = Pipe()
     action_queue = TimedQueue(receiver, sender, time_limit)
+    db_state = DebugState.from_state(game_state)
+    #clear_screen()
+    #print(db_state)
     if debug:  # run the search in the main process and thread
         from copy import deepcopy
         active_player.queue = None
@@ -194,3 +197,11 @@ def _request_action(agent, queue, game_state):
         agent.get_action(game_state)
     except StopSearch:
         pass
+
+
+import os
+def clear_screen():
+   if os.name == 'posix':
+       _ = os.system('clear')
+   else:
+       _ = os.system('cls')
