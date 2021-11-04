@@ -4,7 +4,7 @@ from isolation.isolation import Action, Isolation
 from typing import Optional, Tuple
 
 
-MAX_SEARCH_DEPTH = 3
+MAX_SEARCH_DEPTH = 5
 
 
 class CustomABNegamaxPlayer(DataPlayer):
