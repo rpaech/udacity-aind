@@ -7,7 +7,7 @@ from typing import Optional, Tuple
 MAX_SEARCH_DEPTH = 3
 
 
-class CustomNegamaxPlayer(DataPlayer):
+class CustomPlayer(DataPlayer):
 
     def get_action(self, state: Isolation) -> None:
 

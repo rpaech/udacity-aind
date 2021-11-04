@@ -8,7 +8,7 @@
             "name": "Greedy, 2 rounds",
             "type": "python",
             "request": "launch",
-            "program": "run_match.py",
+            "program": "run_match_sync.py",
             "args": ["-r", "2", "-o", "GREEDY"],
             "console": "integratedTerminal"
         },
