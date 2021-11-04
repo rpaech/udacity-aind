@@ -1,10 +1,9 @@
 import random
 from sample_players import DataPlayer
-from isolation.isolation import Action, Isolation
-from typing import Optional, Tuple
+from isolation.isolation import Isolation
 
 
-MAX_SEARCH_DEPTH = 3
+MAX_SEARCH_DEPTH = 6
 
 
 class CustomPlayer(DataPlayer):
@@ -14,49 +13,33 @@ class CustomPlayer(DataPlayer):
         if state.ply_count < 2:
             self.queue.put(random.choice(state.actions()))
         else:
-            _, action = self.search(state, 0, float('-inf'), float('inf'))
-            self.queue.put(action)
+            for depth in range(MAX_SEARCH_DEPTH):
+                action = max(state.actions(), key=lambda x:
+                             self.search(state.result(x), depth,
+                                         float('-inf'), float('inf')))
+                self.queue.put(action)
 
-    def search(self, state: Isolation, depth: int, alpha: float, beta: float
-               ) -> Tuple[float, Optional[Action]]:
+    def search(self, state: Isolation, depth: int,
+               alpha: float, beta: float) -> float:
 
         if state.terminal_test():
-            actions = state.actions()
-            if len(actions) > 0:
-                return state.utility(state.player()), actions[0]
-            else:
-                return state.utility(state.player()), None
+            value = state.utility(state.player())
+        elif depth == 0:
+            value = self.score(state)
+        else:
+            value = float('-inf')
+            for action in state.actions():
+                value = max(value,
+                            self.search(state.result(action), depth - 1,
+                                        -beta, -max(alpha, value)))
+                if value >= beta:
+                    break
 
-        if depth == MAX_SEARCH_DEPTH:
-            return self.score(state), None
-
-        best_action = None
-        best_score = float('-inf')
-
-        for action in state.actions():
-
-            new_state = state.result(action)
-
-            score, _ = self.search(new_state, depth + 1, -beta,
-                                   -max(alpha, best_score))
-            score = -score
-
-            if score > best_score:
-                best_score = score
-                best_action = action
-
-            if best_score >= beta:
-                break
-
-        return best_score, best_action
+        return -value
 
     def score(self, state: Isolation) -> int:
 
-        own_loc = state.locs[state.player()]
-        opp_loc = state.locs[1 - state.player()]
+        playerA_options = len(state.liberties(state.locs[state.player()]))
+        playerB_options = len(state.liberties(state.locs[1 - state.player()]))
 
-        own_liberties = state.liberties(own_loc)
-        opp_liberties = state.liberties(opp_loc)
-
-        result = len(own_liberties) - len(opp_liberties)
-        return result
+        return playerA_options - playerB_options

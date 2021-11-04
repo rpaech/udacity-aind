@@ -1,1 +1,1 @@
-from custom_negamax_player import CustomPlayer
+from custom_abnegamax_player import CustomPlayer
