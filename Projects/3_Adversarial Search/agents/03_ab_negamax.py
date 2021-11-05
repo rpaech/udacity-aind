@@ -1,9 +1,22 @@
+# AB negamax search with iterative deepening
+
 import random
 from sample_players import DataPlayer
 from isolation.isolation import Isolation
 
 
-MAX_SEARCH_DEPTH = 10
+MAX_SEARCH_DEPTH = 100
+
+
+def liberty_difference(state: Isolation) -> int:
+
+    def liberty_count(player_id: int) -> int:
+        return len(state.liberties(state.locs[player_id]))
+
+    this_player = state.player()
+    next_player = 1 - this_player
+
+    return liberty_count(this_player) - liberty_count(next_player)
 
 
 class CustomPlayer(DataPlayer):
@@ -25,27 +38,14 @@ class CustomPlayer(DataPlayer):
         if state.terminal_test():
             value = state.utility(state.player())
         elif depth == 0:
-            value = self.score(state)
+            value = liberty_difference(state)
         else:
             value = float('-inf')
             for action in state.actions():
                 value = max(value,
                             self.search(state.result(action), depth - 1,
                                         -beta, -max(alpha, value)))
-
                 if value >= beta:
                     break
 
-            value += self.score(state)/depth
-
         return -value
-
-    def score(self, state: Isolation) -> int:
-
-        def liberty_count(player_id: int) -> int:
-            return len(state.liberties(state.locs[player_id]))
-
-        this_player = state.player()
-        next_player = 1 - this_player
-
-        return liberty_count(this_player) - liberty_count(next_player)

@@ -8,5 +8,15 @@
         "test_*.py"
     ],
     "python.testing.pytestEnabled": false,
-    "python.testing.unittestEnabled": true
+    "python.testing.unittestEnabled": true,
+    "logViewer.watch": [
+        {
+            "title": "Match logs",
+            "pattern": "matches.log"
+        },
+        {
+            "title": "Batch run logs",
+            "pattern": "batch_run_agents.log"
+        }
+    ]
 }

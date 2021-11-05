@@ -1,3 +1,5 @@
+# AB negascout search with iterative deepening and modified heuristic
+
 import random
 from sample_players import DataPlayer
 from isolation.isolation import Isolation

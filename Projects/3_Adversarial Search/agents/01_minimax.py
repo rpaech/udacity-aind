@@ -1,3 +1,5 @@
+# Basic minimax search taken from sample agents
+
 import random
 from sample_players import DataPlayer
 from isolation.isolation import Action, Isolation
