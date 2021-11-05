@@ -249,7 +249,7 @@ def main():
         custom_agent.name, results[custom_agent], match_count, percentage, test_agent.name, time_taken, time_taken/match_count
     )
     print()
-    print(message); _logger.info(message)
+    print(message); logger.info(message)
     print()
 
 if __name__ == '__main__':

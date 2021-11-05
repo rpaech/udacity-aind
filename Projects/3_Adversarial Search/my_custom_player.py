@@ -1,1 +1,1 @@
-from custom_negamax_player import CustomPlayer
+from custom_abnegascout_sumscore_player import CustomPlayer

@@ -15,10 +15,12 @@ class CustomPlayer(DataPlayer):
         else:
             for depth in range(MAX_SEARCH_DEPTH):
                 action = max(state.actions(), key=lambda x:
-                             self.search(state.result(x), depth))
+                             self.search(state.result(x), depth,
+                                         float('-inf'), float('inf')))
                 self.queue.put(action)
 
-    def search(self, state: Isolation, depth: int) -> float:
+    def search(self, state: Isolation, depth: int,
+               alpha: float, beta: float) -> float:
 
         if state.terminal_test():
             value = state.utility(state.player())
@@ -28,7 +30,13 @@ class CustomPlayer(DataPlayer):
             value = float('-inf')
             for action in state.actions():
                 value = max(value,
-                            self.search(state.result(action), depth - 1))
+                            self.search(state.result(action), depth - 1,
+                                        -beta, -max(alpha, value)))
+
+                if value >= beta:
+                    break
+
+            value += self.score(state)/depth
 
         return -value
 
