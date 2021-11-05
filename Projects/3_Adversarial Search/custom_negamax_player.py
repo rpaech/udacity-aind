@@ -30,11 +30,16 @@ class CustomPlayer(DataPlayer):
                 value = max(value,
                             self.search(state.result(action), depth - 1))
 
+            value += self.score(state)
+
         return -value
 
     def score(self, state: Isolation) -> int:
 
-        playerA_options = len(state.liberties(state.locs[state.player()]))
-        playerB_options = len(state.liberties(state.locs[1 - state.player()]))
+        def liberty_count(player_id: int) -> int:
+            return len(state.liberties(state.locs[player_id]))
 
-        return playerA_options - playerB_options
+        this_player = state.player()
+        next_player = 1 - this_player
+
+        return liberty_count(this_player) - liberty_count(next_player)
