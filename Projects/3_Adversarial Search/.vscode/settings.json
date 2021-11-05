@@ -11,11 +11,11 @@
     "python.testing.unittestEnabled": true,
     "logViewer.watch": [
         {
-            "title": "Match logs",
+            "title": "Matches",
             "pattern": "matches.log"
         },
         {
-            "title": "Batch run logs",
+            "title": "Batch run agents",
             "pattern": "batch_run_agents.log"
         }
     ]
