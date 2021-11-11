@@ -1,11 +1,7 @@
-# AB negascout search with iterative deepening and modified heuristic
-
 import random
 from sample_players import DataPlayer
-from isolation.isolation import Isolation
-
-
-MAX_SEARCH_DEPTH = 100
+from isolation.isolation import Action, Isolation
+from typing import Optional, Tuple, Dict
 
 
 def liberty_difference(state: Isolation) -> int:
@@ -19,40 +15,71 @@ def liberty_difference(state: Isolation) -> int:
     return liberty_count(this_player) - liberty_count(next_player)
 
 
+def log_stat(state: Isolation, search_depth: int, max_search_depth: int,
+             best_score: int, action: Action) -> Dict:
+
+    return {'round': state.ply_count,
+            'depth': search_depth,
+            'max depth': max_search_depth,
+            'score': best_score,
+            'action': action}
+
+
 class CustomPlayer(DataPlayer):
 
     def get_action(self, state: Isolation) -> None:
 
         if state.ply_count < 2:
             self.queue.put(random.choice(state.actions()))
-        else:
-            for depth in range(MAX_SEARCH_DEPTH):
-                action = max(state.actions(), key=lambda x:
-                             self.search(state.result(x), depth,
-                                         float('-inf'), float('inf')))
-                self.queue.put(action)
 
-    def scout(self, state: Isolation, depth: int,
+        else:
+            max_search_depth = len(state.liberties(None)) // 2
+
+            for search_depth in range(max_search_depth):
+
+                alpha = float("-inf")
+                beta = float("inf")
+                best_score = float("-inf")
+                best_action = None
+
+                for action in state.actions():
+                    score = self.scout(state.result(action), search_depth,
+                                       -beta, -max(alpha, best_score))
+
+                    if best_score < score or best_action is None:
+                        best_score = score
+                        best_action = action
+
+                self.queue.put(best_action)
+                self.context = log_stat(state, search_depth, max_search_depth,
+                                        best_score, best_action)
+
+    def scout(self, state: Isolation, search_depth: int,
               alpha: float, beta: float) -> float:
 
         if state.terminal_test():
             result = state.utility(state.player())
-        elif depth == 0:
+
+        elif search_depth == 0:
             result = liberty_difference(state)
+
         else:
             best_score = float('-inf')
             adaptive_beta = beta
+
             for action in state.actions():
                 new_state = state.result(action)
-                current_score = self.search(new_state, depth - 1,
+                current_score = self.search(new_state, search_depth - 1,
                                             -adaptive_beta,
                                             -max(alpha, best_score))
+
                 if current_score > best_score:
-                    if adaptive_beta == beta or depth <= 2:
+                    if adaptive_beta == beta or search_depth <= 2:
                         best_score = current_score
                     else:
-                        best_score = self.scout(new_state, depth - 1, -beta,
-                                                -current_score)
+                        best_score = self.scout(new_state, search_depth,
+                                                -beta, -current_score)
+
                 if best_score >= beta:
                     break
 
@@ -62,22 +89,24 @@ class CustomPlayer(DataPlayer):
 
         return -result
 
-    def search(self, state: Isolation, depth: int,
+    def search(self, state: Isolation, search_depth: int,
                alpha: float, beta: float) -> float:
 
         if state.terminal_test():
             result = state.utility(state.player())
-        elif depth == 0:
+
+        elif search_depth == 0:
             result = liberty_difference(state)
+
         else:
-            best_score = float('-inf')
+            score = float('-inf')
             for action in state.actions():
-                best_score = max(best_score,
-                                 self.search(state.result(action), depth - 1,
-                                             -beta, -max(alpha, best_score)))
-                if best_score >= beta:
+                score = max(score,
+                            self.search(state.result(action), search_depth - 1,
+                                        -beta, -max(alpha, score)))
+                if score >= beta:
                     break
 
-            result = best_score + liberty_difference(state)
+            result = score + liberty_difference(state)
 
         return -result

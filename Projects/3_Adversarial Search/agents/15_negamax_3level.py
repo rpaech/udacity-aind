@@ -32,7 +32,7 @@ class CustomPlayer(DataPlayer):
         if state.ply_count < 2:
             self.queue.put(random.choice(state.actions()))
         else:
-            max_search_depth = len(state.liberties(None)) // 2
+            max_search_depth = 3
 
             for search_depth in range(max_search_depth):
 
@@ -65,6 +65,6 @@ class CustomPlayer(DataPlayer):
                             self.search(state.result(action),
                                         search_depth - 1))
 
-            result = score + liberty_difference(state)
+            result = score
 
         return -result

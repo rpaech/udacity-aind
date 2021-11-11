@@ -33,12 +33,13 @@ def liberty_difference(state: Isolation) -> int:
 
 
 def log_stat(state: Isolation, search_depth: int, max_search_depth: int,
-             best_score: int, action: Action) -> Dict:
+             best_score: int, action_count: int, action: Action) -> Dict:
 
     return {'round': state.ply_count,
             'depth': search_depth,
             'max depth': max_search_depth,
             'score': best_score,
+            'options': action_count,
             'action': action}
 
 
@@ -88,19 +89,23 @@ class CustomPlayer(DataPlayer):
                 alpha = float("-inf")
                 beta = float("inf")
                 best_score = float("-inf")
-                best_action = None
+                current_options = None
 
                 for action in state.actions():
                     score = self.scout(state.result(action), search_depth,
                                        -beta, -max(alpha, best_score))
 
-                    if best_score < score or best_action is None:
+                    if best_score < score or current_options is None:
                         best_score = score
-                        best_action = action
+                        current_options = [action]
+                    elif best_score == score:
+                        current_options.append(action)
 
-                self.queue.put(best_action)
+                action_chosen = random.choice(current_options)
+                self.queue.put(action_chosen)
                 self.context = log_stat(state, search_depth, max_search_depth,
-                                        best_score, best_action)
+                                        best_score, len(current_options),
+                                        action_chosen)
 
     def scout(self, state: Isolation, search_depth: int,
               alpha: float, beta: float) -> float:
@@ -109,7 +114,7 @@ class CustomPlayer(DataPlayer):
             result = state.utility(state.player())
 
         elif search_depth == 0:
-            result = liberty_difference(state)
+            result = liberty_difference(state) * 100
 
         else:
             best_score = float('-inf')
@@ -133,7 +138,8 @@ class CustomPlayer(DataPlayer):
 
                 adaptive_beta = max(alpha, best_score) + 1
 
-            result = best_score + liberty_difference(state) / search_depth
+            result = best_score + int(liberty_difference(state) * 100
+                                      / search_depth)
 
         return -result
 
@@ -144,7 +150,7 @@ class CustomPlayer(DataPlayer):
             result = state.utility(state.player())
 
         elif search_depth == 0:
-            result = liberty_difference(state)
+            result = liberty_difference(state) * 100
 
         else:
             score = float('-inf')
@@ -155,6 +161,7 @@ class CustomPlayer(DataPlayer):
                 if score >= beta:
                     break
 
-            result = score + liberty_difference(state) / search_depth
+            result = score + int(liberty_difference(state) * 100
+                                 / search_depth)
 
         return -result
